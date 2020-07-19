@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Create EC2 instance
+      ec2:
+        key_name: AnsibleTest
+        instance_tags:
+          inventory_host: web.test
+        group: default
+        instance_type: t2.micro
+        image: ami-003634241a8fcdec0 #Ubuntu 18
+        region: us-west-2
+        wait: yes
+        wait_timeout: 500
+        exact_count: 1
+        count_tag:
+          inventory_host: web.test
+        vpc_subnet_id: subnet-800609da

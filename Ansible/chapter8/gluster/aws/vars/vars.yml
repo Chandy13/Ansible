@@ -1,0 +1,14 @@
+---
+instances:
+  - name: gluster1
+    group: default
+    image: ami-0ac80df6eff0e70b5
+    count: 0
+    subnetid: subnet-ae116dc9
+
+
+  - name: gluster2
+    group: default
+    image: ami-0ac80df6eff0e70b5
+    count: 0
+    subnetid: subnet-ae116dc9

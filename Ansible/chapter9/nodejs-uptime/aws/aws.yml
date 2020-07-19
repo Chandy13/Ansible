@@ -1,0 +1,48 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: true
+
+  vars_files:
+    - vars/vars.yml
+
+## need to add the following
+## Subnet creation
+## More tagging
+
+  tasks:
+    - name: Create EC2 Security Group.
+      ec2_group:
+        name: "{{ item.name }}"
+        description: "Example EC2 security group for {{ item.name }}"
+        region: us-east-1
+        state: absent
+        rules: "{{ item.rules }}"
+        rules_egress: "{{ item.rules_egress }}"
+      with_items: "{{ security_groups }}"
+
+    - name: Create EC2 instance.
+      ec2:
+        key_name: Chandy
+        instance_tags:
+          inventory_name: "{{ item.name }}" 
+        group: "{{ item.group }}"
+        instance_type: "{{ item.instance_type }}"
+        image: "{{ item.image }}"
+        region: us-east-1
+        wait: yes
+        wait_timeout: 500
+        exact_count: "{{ item.count }}"
+        count_tag:
+          inventory_name: "{{ item.name }}"
+        vpc_subnet_id: "{{ item.subnetid }}" 
+      register: created_instances
+      with_items: "{{ instances }}"
+  
+    - name: Add EC2 instances to inventory groups.
+      add_host:
+        name: "{{ item.1.tagged_instances.0.public_ip }}"
+        groups: "aws,{{ item.1.item.group }},{{ item.1.item.name }}"
+        ansible_user: ubuntu #change this depending on platform
+      when: item.1.instances is defined
+      with_indexed_items: "{{ created_instances.results }}"

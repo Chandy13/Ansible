@@ -1,0 +1,31 @@
+---
+- hosts: balancer
+  become: yes
+
+  vars:
+    firewall_allowed_tcp_ports:
+      - "22"
+      - "80"
+
+    haproxy_backend_servers:
+      - name: 18.208.201.86
+        address: 18.208.201.86
+
+      - name: 54.87.181.239
+        address: 54.87.181.239
+
+  roles:
+    - geerlingguy.firewall
+    - geerlingguy.haproxy
+
+- hosts: app 
+  become: yes
+
+  vars:
+    firewall_allowed_tcp_ports:
+      - "22"
+      - "80"
+
+  roles:
+    - geerlingguy.firewall
+    - geerlingguy.apache

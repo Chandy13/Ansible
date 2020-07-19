@@ -1,0 +1,8 @@
+---
+instances:
+  - name: rails-demo
+    group: default #default security group
+    instance_type: t3a.micro
+    image: ami-0ac80df6eff0e70b5 #Ubuntu 18.04
+    count: 0 #change to number you like
+    subnetid:  subnet-ae116dc9 #default 172.31.0.0/20 

@@ -1,0 +1,47 @@
+---
+instances:
+  - name: bal1
+    group: balancer #default security group
+    instance_type: t2.micro #1CPU 1GiB/ t3a.micro #2CPU 1GiB / t2.medium #2CPU 4GiB
+    image: ami-0ac80df6eff0e70b5 #Ubuntu 18.04
+    count: 0 #change to number you like
+    subnetid:  subnet-ae116dc9 #default 172.31.0.0/20 
+
+  - name: app1
+    group: app #default security group
+    instance_type: t2.micro #1CPU 1GiB/ t3a.micro #2CPU 1GiB / t2.medium #2CPU 4GiB
+    image: ami-0ac80df6eff0e70b5 #Ubuntu 18.04
+    count: 0 #change to number you like
+    subnetid:  subnet-ae116dc9 #default 172.31.0.0/20 
+
+  - name: app2
+    group: app
+    instance_type: t2.micro #1CPU 1GiB/ t3a.micro #2CPU 1GiB / t2.medium #2CPU 4GiB
+    image: ami-0ac80df6eff0e70b5 #Ubuntu 18.04
+    count: 0 #change to number you like
+    subnetid:  subnet-ae116dc9 #default 172.31.0.0/20 
+
+security_groups:
+  - name: balancer
+    rules:
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+    rules_egress: []
+
+  - name: app
+    rules:
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+    rules_egress: []
